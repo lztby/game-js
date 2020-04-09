@@ -19,12 +19,57 @@
         var log = console.log.bind(console)
         var canvas = document.querySelector('#id-canvas')
         var context = canvas.getContext('2d')
+        var rightload = 300
 
+        var x = 150
+        var y = 200
+        var speed = 10
         var img = new Image()
         img.src = 'paddle.png'
         img.onload = function () {
-            context.drawImage(img, 150, 200)
+            context.drawImage(img, x, y)
         }
+        var leftdown = false
+        var rightdown = false
+        var leftmove = 'a'
+        var rightmove = 'd'
+        //events
+        window.addEventListener('keydown', function (event) {
+            var k = event.key
+            if (k == leftmove) {
+                leftdown = true
+            }
+            else if (k == rightmove) {
+                rightdown = true
+            }
+        })
+        window.addEventListener('keyup', function (event) {
+            var k = event.key
+            if (k == leftmove) {
+                leftdown = false
+            }
+            else if (k == rightmove) {
+                rightdown = false
+            }
+        })
+        setInterval(function () {
+            if (leftdown) {
+                x -= speed
+            }
+            else if (rightdown) {
+                x += speed
+            }
+            //增加范围
+            if (x <= 0) {
+                x = 0
+            }
+            else if (x >= rightload) {
+                x = rightload
+            }
+            //更新画布
+            context.clearRect(0, 0, canvas.width, canvas.height)
+            context.drawImage(img, x, y)
+        }, 1000 / 30) //一秒30帧
     </script>
 </body>
 
