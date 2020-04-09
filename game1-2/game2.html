@@ -74,7 +74,37 @@
                     o.y += o.speedY
                 }
             }
+            o.reSpeed = function () {
+                o.speedY = -o.speedY
+            }
 
+            return o
+        }
+        var rectIntersects = function (a, b) {
+            var o = a
+            if (b.y > o.y && b.y < o.y + o.image.height) {
+                if (b.x > o.x && b.x < o.x + o.image.width) {
+                    return true
+                }
+            }
+            return false
+        }
+        var Block = function () {
+            var image = imagefromPath('block.png')
+            var o = {
+                image: image,
+                x: 100,
+                y: 100,
+                // w : ,
+                // h : ,
+                alive: true
+            }
+            o.kill = function () {
+                o.alive = false
+            }
+            o.collide = function (b) {
+                return o.alive && (rectIntersects(o, b) || rectIntersects(b, o))
+            }
             return o
         }
         var Guagame = function () {
@@ -125,6 +155,14 @@
             //去掉var可在网页查paddle.image.width
             var paddle = Paddle()
             var ball = Ball()
+            var blocks = []
+            for (var i = 0; i < 3; i++) {
+                var b = Block()
+                b.x = 150 * i
+                b.y = 50
+                blocks.push(b)
+            }
+
 
             game.registerAction('a', function () {
                 paddle.moveLeft()
@@ -137,15 +175,30 @@
             })
             game.update = function () {
                 ball.move()
-                //相撞
+                //ball 和 paddle相撞
                 if (paddle.collide(ball)) {
-                    ball.speedY = -ball.speedY
+                    ball.reSpeed()
                 }
+                //ball 和 block相撞
+                for (var i = 0; i < blocks.length; i++) {
+                    var block = blocks[i]
+                    if (block.collide(ball)) {
+                        block.kill()
+                        ball.reSpeed()
+                    }
+                }
+
             }
             game.draw = function () {
                 //draw
                 game.drawImage(paddle)
                 game.drawImage(ball)
+                for (var i = 0; i < blocks.length; i++) {
+                    var block = blocks[i]
+                    if (block.alive) {
+                        game.drawImage(block)
+                    }
+                }
             }
         }
         __main()
