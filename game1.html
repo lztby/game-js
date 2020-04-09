@@ -17,59 +17,92 @@
     <script>
 
         var log = console.log.bind(console)
-        var canvas = document.querySelector('#id-canvas')
-        var context = canvas.getContext('2d')
-        var rightload = 300
 
-        var x = 150
-        var y = 200
-        var speed = 10
-        var img = new Image()
-        img.src = 'paddle.png'
-        img.onload = function () {
-            context.drawImage(img, x, y)
+        var imagefromPath = function (path) {
+            var img = new Image()
+            img.src = path
+            return img
         }
-        var leftdown = false
-        var rightdown = false
-        var leftmove = 'a'
-        var rightmove = 'd'
-        //events
-        window.addEventListener('keydown', function (event) {
-            var k = event.key
-            if (k == leftmove) {
-                leftdown = true
+        var Paddle = function () {
+            var image = imagefromPath('paddle.png')
+            var o = {
+                image: image,
+                x: 150,
+                y: 200,
+                speed: 10,
             }
-            else if (k == rightmove) {
-                rightdown = true
+            o.moveLeft = function () {
+                o.x -= o.speed
             }
-        })
-        window.addEventListener('keyup', function (event) {
-            var k = event.key
-            if (k == leftmove) {
-                leftdown = false
+            o.moveRight = function () {
+                o.x += o.speed
             }
-            else if (k == rightmove) {
-                rightdown = false
+            return o
+        }
+        var Guagame = function () {
+            var g = {
+                actions: {},
+                keydowns: {},
             }
-        })
-        setInterval(function () {
-            if (leftdown) {
-                x -= speed
+            var canvas = document.querySelector('#id-canvas')
+            var context = canvas.getContext('2d')
+            g.canvas = canvas
+            g.context = context
+            //draw
+            g.drawImage = function (guaImage) {
+                g.context.drawImage(guaImage.image, guaImage.x, guaImage.y)
             }
-            else if (rightdown) {
-                x += speed
+            //events
+            window.addEventListener('keydown', function (event) {
+                g.keydowns[event.key] = true
+            })
+            window.addEventListener('keyup', function (event) {
+                g.keydowns[event.key] = false
+            })
+            //注册函数
+            g.registerAction = function (key, callback) {
+                g.actions[key] = callback
             }
-            //增加范围
-            if (x <= 0) {
-                x = 0
+            //time
+            setInterval(function () {
+                //events
+                var actions = Object.keys(g.actions)
+                for (var i = 0; i < actions.length; i++) {
+                    var key = actions[i]
+                    if (g.keydowns[key]) {
+                        g.actions[key]()
+                    }
+                }
+
+                //update
+                g.update()
+                //clear
+                context.clearRect(0, 0, canvas.width, canvas.height)
+                g.draw()
+            }, 1000 / 30)
+            return g
+
+        }
+        var __main = function () {
+            var game = Guagame()
+            var paddle = Paddle()
+
+            game.registerAction('a', function () {
+                paddle.moveLeft()
+            })
+            game.registerAction('d', function () {
+                paddle.moveRight()
+            })
+
+            game.update = function () {
+
             }
-            else if (x >= rightload) {
-                x = rightload
+            game.draw = function () {
+                //draw
+                game.drawImage(paddle)
             }
-            //更新画布
-            context.clearRect(0, 0, canvas.width, canvas.height)
-            context.drawImage(img, x, y)
-        }, 1000 / 30) //一秒30帧
+        }
+        __main()
     </script>
 </body>
 
