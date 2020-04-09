@@ -37,7 +37,7 @@
             o.moveRight = function () {
                 o.x += o.speed
             }
-            o.collide = function(ball) {
+            o.collide = function (ball) {
                 if (ball.y + ball.image.height > o.y) {
                     if (ball.x > o.x && ball.x < o.x + o.image.width) {
                         log('相撞')
@@ -56,28 +56,25 @@
                 y: 200,
                 speedX: 10,
                 speedY: 10,
-                fired:false,
+                fired: false,
             }
             o.fire = function () {
                 o.fired = true
             }
             o.move = function () {
-                if(o.fired)
-                {
+                if (o.fired) {
                     // log("move")
-                    if(o.x < 0 || o.x > 400)
-                    {
+                    if (o.x < 0 || o.x > 400) {
                         o.speedX = -o.speedX
                     }
-                    if(o.y < 0 || o.y > 300)
-                    {
+                    if (o.y < 0 || o.y > 300) {
                         o.speedY = -o.speedY
                     }
                     o.x += o.speedX
                     o.y += o.speedY
                 }
             }
-            
+
             return o
         }
         var Guagame = function () {
@@ -113,7 +110,7 @@
                     if (g.keydowns[key]) {
                         g.actions[key]()
                     }
-                }   
+                }
                 //update
                 g.update()
                 //clear
@@ -141,8 +138,7 @@
             game.update = function () {
                 ball.move()
                 //相撞
-                if(paddle.collide(ball))
-                {
+                if (paddle.collide(ball)) {
                     ball.speedY = -ball.speedY
                 }
             }
