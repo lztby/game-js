@@ -1,12 +1,12 @@
-var Block = function () {
+var Block = function (positon) {
     var image = imagefromPath('block.png')
     var o = {
         image: image,
-        x: 100,
-        y: 100,
-        // w : ,
-        // h : ,
-        alive: true
+        x: positon[0],
+        y: positon[1],
+        w: 50,
+        h: 20,
+        alive: true,
     }
     o.kill = function () {
         o.alive = false

@@ -15,27 +15,62 @@
     <script src="guagame.js"></script>
     <script src="block.js"></script>
     <script src="utils.js"></script>
+    <script src="level.js"></script>
 
 </head>
 
 <body>
     <canvas id="id-canvas" width="400" height="300"></canvas>
+    <hr>
+    <input id=id-input-speed type="range" value="1">
     <script>
 
+        var loadLevel = function (n) {
+            n = n - 1
+            var level = levels[n]
+            var blocks = []
+            for (var i = 0; i < level.length; i++) {
+                var p = level[i]
+                var b = Block(p)
+                blocks.push(b)
+            }
+            return blocks
+        }
+        var blocks = []
+        var EnableDebugMode = function (enable) {
+            if (!enable) {
+                return
+            }
+            window.paused = false
+            //暂停
+            window.addEventListener('keydown', function (event) {
+                var k = event.key
+                if (k == 'p') {
+                    window.paused = !window.paused
+                } else if ('1234567'.includes(k)) {
+                    // 为了 debug 临时加的载入关卡功能
+                    blocks = loadLevel(Number(k))
+                }
+            })
+
+            // 控制速度
+            document.querySelector('#id-input-speed').addEventListener('input', function (event) {
+                var input = event.target
+                // log(event, input.value)
+                window.fps = Number(input.value)
+            })
+        }
+
         var __main = function () {
-            var game = Guagame()
+            EnableDebugMode(true)
+
+            var game = Guagame(30)
             //去掉var可在网页查paddle.image.width
             var paddle = Paddle()
             var ball = Ball()
-            var blocks = []
-            for (var i = 0; i < 3; i++) {
-                var b = Block()
-                b.x = 150 * i
-                b.y = 50
-                blocks.push(b)
-            }
 
-            var paused = false
+            blocks = loadLevel(1)
+
             game.registerAction('a', function () {
                 paddle.moveLeft()
             })
@@ -45,15 +80,9 @@
             game.registerAction('f', function () {
                 ball.fire()
             })
-            //暂停
-            window.addEventListener('keydown', function () {
-                if (event.key == 'p') {
-                    paused = !paused
-                }
-            })
 
             game.update = function () {
-                if (paused) {
+                if (window.paused) {
                     return
                 }
                 ball.move()
@@ -82,6 +111,7 @@
                     }
                 }
             }
+
         }
 
         __main()
