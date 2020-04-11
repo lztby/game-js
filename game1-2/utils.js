@@ -1,4 +1,9 @@
 var log = console.log.bind(console)
+// 在自己的区域输出log
+// var e = sel => document.querySelector(sel)
+// var log = function (s) {
+//     e('#id-text-log').value += '\n' + s
+// }
 
 var imagefromPath = function (path) {
     var img = new Image()
