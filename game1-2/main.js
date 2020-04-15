@@ -84,6 +84,9 @@ var __main = function () {
         }
 
         game.draw = function () {
+            //draw 背景
+            game.context.fillStyle = "#554";
+            game.context.fillRect(0, 0, 400, 300); 
             //draw
             game.drawImage(paddle)
             game.drawImage(ball)
@@ -95,9 +98,35 @@ var __main = function () {
             }
             game.context.fillText("分数: " + score, 10, 290)
         }
+
+        //mouse event
+        var enableDrag = false
+        game.canvas.addEventListener('mousedown', e => {
+            var x = e.offsetX
+            var y = e.offsetY  
+            if(ball.hasPoint(x,y)) {
+                enableDrag = true
+            }  
+        })
         
+        game.canvas.addEventListener('mousemove', e => {
+            var x = e.offsetX
+            var y = e.offsetY 
+            if(enableDrag) {
+                ball.x = x
+                ball.y = y
+            }    
+        });
+        
+        game.canvas.addEventListener('mouseup', e => {
+            var x = e.offsetX
+            var y = e.offsetY 
+            enableDrag = false
+        });   
     })
 
     EnableDebugMode(true,game)
+
+    
 }
 __main()

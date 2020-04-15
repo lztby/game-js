@@ -36,6 +36,10 @@ var Ball = function (game) {
     o.reSpeed = function () {
         o.speedY = -o.speedY
     }
-
+    o.hasPoint = function (x,y) {
+        var xIN = o.x < x && x < o.x + o.w 
+        var yIN = o.h < x && y < o.y + o.h 
+        return xIN && yIN
+    }
     return o
 }
