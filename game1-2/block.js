@@ -1,14 +1,25 @@
-var Block = function (positon) {
-    var image = imagefromPath('block.png')
-    var o = {
-        image: image,
-        x: positon[0],
-        y: positon[1],
-        w: 50,
-        h: 20,
-        alive: true,
-        lives: positon[2] || 1
-    }
+var Block = function (positon,game) {
+
+    // var img = game.imageByName('block')
+    
+    // var o = {
+    //     x: positon[0],
+    //     y: positon[1],
+    //     alive: true,
+    //     lives: positon[2] || 1,
+    // }
+    // o.image = img.image
+    // o.w = img.w
+    // o.h = img.h
+    var o = game.imageByName('block')
+    
+    o.x = positon[0]
+    o.y = positon[1]
+    o.w = 50
+    o.h = 20
+    o.alive = true
+    o.lives = positon[2] || 1
+
     o.kill = function () {
         o.lives--
         if(o.lives < 1){
