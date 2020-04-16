@@ -26,7 +26,7 @@ var Scene = function (game) {
         ball.move()
         //结束游戏
         if(ball.y > paddle.y) {
-            var end = SceneEnd(game)
+            var end = new SceneEnd(game)
             game.replaceScene(end)
         }
         //ball 和 paddle相撞

@@ -45,13 +45,9 @@ var __main = function () {
     }
 
     // 这里的function参数不是很理解
-    var game = Guagame(30,images,function(g){
-        // log("game1:",game)
-        // log("g1:",g)
-        var s = SceneTitle(g)
+    var game = Guagame.instance(30,images,function(g){
+        var s = new SceneTitle(g)
         g.runWithScene(s)
-        // log("game2:",game)
-        // // log("g2:",g)
     })
 
     EnableDebugMode(true,game)
