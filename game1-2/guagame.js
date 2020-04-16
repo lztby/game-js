@@ -2,6 +2,7 @@ var Guagame = function (fps,images,runcallBack) {
     // images 是一个对象, 里面是图片的引用名字和图片路径
     // 程序会在所有图片载入成功后才运行
     var g = {
+        scene:null,
         actions: {},
         keydowns: {},
         images: {},
@@ -64,15 +65,13 @@ var Guagame = function (fps,images,runcallBack) {
             g.images[name] = img
             loads.push(1)
             if(loads.length == names.length) {
-                g.run()
+                g.__start()
             }
         }
     }   
 
     g.imageByName = function (name) {
         var img = g.images[name]
-        log('img.width',img.width)
-        log('img.height',img.height)
         var image = {
             w : img.width,
             h : img.height,
@@ -80,16 +79,27 @@ var Guagame = function (fps,images,runcallBack) {
         }
         return image
     }
-
-    g.run = function () {
-        runcallBack(g)
-        //开始运行程序
-        setTimeout(function(){
-            runloop()
-        },1000 / fps)
+    g.replaceScene = function (scene) {
+        g.scene = scene
     }
-   
-    return g
 
+    g.update = function () {
+        g.scene.update()
+    }
+    g.draw = function () {
+        g.scene.draw()
+    }
+    g.runWithScene = function (scene) {
+        g.scene = scene
+        //开始运行程序
+        // setTimeout(function(){
+        //     runloop()
+        // },1000 / fps)
+    }
+    g.__start = function () {
+        runcallBack(g)
+        runloop()
+    }
+    return g
 }
 

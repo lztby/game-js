@@ -2,7 +2,7 @@ var Ball = function (game) {
     var o = game.imageByName('ball')
    
     o.x = 150
-    o.y = 200
+    o.y = 150
     o.speedX = 10
     o.speedY = 10
     o.fired = false

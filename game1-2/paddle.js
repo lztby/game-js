@@ -27,6 +27,7 @@ var Paddle = function (game) {
     var aInb = function(x, x1, x2) {
         return x >= x1 && x <= x2
     }
+    
     o.collide = function(ball) {
         // if (ball.y + ball.h > o.y) {
         //     if (ball.x > o.x && ball.x < o.x + o.w) {
