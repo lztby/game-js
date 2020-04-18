@@ -39,14 +39,18 @@ var EnableDebugMode = function (enable,game) {
 var __main = function () {
 
     var images = {
-        ball:'img/ball.png',
-        block:'img/block.png',
-        paddle:'img/paddle.png',
+        cloud:'img/cloud.png',
+        bullet:'img/bullet.png',
+        sky:'img/sky.png',
+        player:'img/player.png',
+        enemy1:'img/enemy1.png',
+        enemy2:'img/enemy2.png',
+        enemy3:'img/enemy3.png',
     }
 
     // 这里的function参数不是很理解
     var game = Guagame.instance(30,images,function(g){
-        var s = new SceneTitle(g)
+        var s = new Scene(g)
         g.runWithScene(s)
     })
 

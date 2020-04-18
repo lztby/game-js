@@ -31,7 +31,7 @@ class Guagame {
     }
     //draw
     drawImage(img) {
-        this.context.drawImage(img.image, img.x, img.y)
+        this.context.drawImage(img.texture, img.x, img.y)
     }
     //注册函数
     registerAction (key, callback) {
@@ -58,15 +58,10 @@ class Guagame {
             g.runloop()
         },1000 / window.fps)
     }
-    imageByName (name) {
+    textureByName (name) {
         var g = this
         var img = g.images[name]
-        var image = {
-            w : img.width,
-            h : img.height,
-            image : img,
-        }
-        return image
+        return img
     }
     replaceScene (scene) {
         this.scene = scene

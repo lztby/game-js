@@ -1,90 +1,70 @@
-var Scene = function (game) {
-    var s = {
-        game: game,
-    }   
-    //去掉var可在网页查paddle.image.width
-    var paddle = Paddle(game)
-    var ball = Ball(game)
-
-    var score = 0
-    blocks = loadLevel(1,game)
-
-    game.registerAction('a', function () {
-        paddle.moveLeft()
-    })
-    game.registerAction('d', function () {
-        paddle.moveRight()
-    })
-    game.registerAction('f', function () {
-        ball.fire()
-    })
-     
-    s.update = function () {
-        if (window.paused) {
-            return
-        }
-        ball.move()
-        //结束游戏
-        if(ball.y > paddle.y) {
-            var end = new SceneEnd(game)
-            game.replaceScene(end)
-        }
-        //ball 和 paddle相撞
-        if (paddle.collide(ball)) {
-            ball.reSpeed()
-        }
-        //ball 和 block相撞
-        for (var i = 0; i < blocks.length; i++) {
-            var block = blocks[i]
-            if (block.collide(ball)) {
-                block.kill()
-                ball.reSpeed()
-                score += 100
-            }
-        }
-    } 
-    s.draw = function () {
-        //draw 背景
-        game.context.fillStyle = "#554";
-        game.context.fillRect(0, 0, 400, 300); 
-        //draw
-        game.drawImage(paddle)
-        game.drawImage(ball)
-        for (var i = 0; i < blocks.length; i++) {
-            var block = blocks[i]
-            if (block.alive) {
-                game.drawImage(block)
-            }
-        }
-        game.context.fillStyle = "red";
-        game.context.fillText("分数: " + score, 10, 290)
-    }
-    //mouse event
-    var enableDrag = false
-    game.canvas.addEventListener('mousedown', e => {
-        var x = e.offsetX
-        var y = e.offsetY  
-        if(ball.hasPoint(x,y)) {
-            enableDrag = true
-        }  
-    })
-    
-    game.canvas.addEventListener('mousemove', e => {
-        var x = e.offsetX
-        var y = e.offsetY 
-        if(enableDrag) {
-            ball.x = x
-            ball.y = y
-        }    
-    })
-     
-    game.canvas.addEventListener('mouseup', e => {
-        var x = e.offsetX
-        var y = e.offsetY 
-        enableDrag = false
-    })
-
-    return s
+const config = {
+    player_speed :10,
+    cloud_speed : 1,
+    enemy_speed : 5,
+    bullet_speed : 5,
 }
 
+const randomBetween = function(start,end) {
+    var n = Math.random() * (end - start + 1)
+    return Math.floor(n + start) 
+}
+
+class Scene extends GuaScene{
+    constructor(game) {
+        super(game)
+        this.setup()
+        this.setupInput()
+    }
+
+    setup() {
+        this.enemiesOfNum = 10
+        this.bg = new GuaImage(this.game,'sky') 
+        this.cloud = new Cloud(this.game,'cloud') 
+        this.player = new Player(this.game)  
+        this.player.x = 150
+        this.player.y = 150
+        
+        this.addElement(this.bg)
+        this.addElement(this.cloud)
+        this.addElement(this.player)
+        this.addElements()
+
+    }
+    addElements() {
+        var es = []
+        for (let index = 0; index < this.enemiesOfNum; index++) {
+            var e = new Enemy(this.game)
+            // es.push(e)
+            this.addElement(e)
+            
+        }
+        this.enemys = es
+    }
+    setupInput() {
+        var g = this.game
+        // s 必须替换
+        var s = this
+        g.registerAction('a', function () {
+            s.player.moveLeft()
+        })
+        g.registerAction('d', function () {
+            s.player.moveRight()
+        })
+        g.registerAction('w', function () {
+            s.player.moveUp()
+        })
+        g.registerAction('s', function () {
+            s.player.moveDown()
+        })
+        g.registerAction('j', function () {
+            s.player.fire()
+        })
+    }
+        
+    update() {
+        super.update()
+        this.cloud.y += 1
+    }
+}
 
