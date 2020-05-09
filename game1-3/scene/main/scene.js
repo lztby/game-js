@@ -1,16 +1,16 @@
 const config = {
-    player_speed :10,
-    cloud_speed : 1,
-    enemy_speed : 5,
-    bullet_speed : 5,
+    player_speed: 10,
+    cloud_speed: 1,
+    enemy_speed: 5,
+    bullet_speed: 5,
 }
 
-const randomBetween = function(start,end) {
+const randomBetween = function (start, end) {
     var n = Math.random() * (end - start + 1)
-    return Math.floor(n + start) 
+    return Math.floor(n + start)
 }
 
-class Scene extends GuaScene{
+class Scene extends GuaScene {
     constructor(game) {
         super(game)
         this.setup()
@@ -19,16 +19,19 @@ class Scene extends GuaScene{
 
     setup() {
         this.enemiesOfNum = 10
-        this.bg = new GuaImage(this.game,'sky') 
-        this.cloud = new Cloud(this.game,'cloud') 
-        this.player = new Player(this.game)  
+        this.bg = new GuaImage(this.game, 'sky')
+        this.cloud = new Cloud(this.game, 'cloud')
+        this.player = new Player(this.game)
         this.player.x = 150
         this.player.y = 150
-        
+
         this.addElement(this.bg)
         this.addElement(this.cloud)
         this.addElement(this.player)
         this.addElements()
+        // add particles
+        var ps = GuaParticleSystem.new(this.game)
+        this.addElement(ps)
 
     }
     addElements() {
@@ -37,13 +40,13 @@ class Scene extends GuaScene{
             var e = new Enemy(this.game)
             // es.push(e)
             this.addElement(e)
-            
+
         }
         this.enemys = es
     }
     setupInput() {
         var g = this.game
-        // s 必须替换
+        // s 必须替杢
         var s = this
         g.registerAction('a', function () {
             s.player.moveLeft()
@@ -61,7 +64,7 @@ class Scene extends GuaScene{
             s.player.fire()
         })
     }
-        
+
     update() {
         super.update()
         this.cloud.y += 1

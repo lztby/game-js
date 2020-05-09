@@ -1,17 +1,17 @@
-var loadLevel = function (n,game) {
+var loadLevel = function (n, game) {
     n = n - 1
     var level = levels[n]
     var blocks = []
     for (var i = 0; i < level.length; i++) {
         var p = level[i]
-        var b = Block(p,game)
+        var b = Block(p, game)
         blocks.push(b)
     }
     return blocks
 }
 
 var blocks = []
-var EnableDebugMode = function (enable,game) {
+var EnableDebugMode = function (enable, game) {
     if (!enable) {
         return
     }
@@ -24,7 +24,7 @@ var EnableDebugMode = function (enable,game) {
             window.paused = !window.paused
         } else if ('1234567'.includes(k)) {
             // 为了 debug 临时加的载入关卡功能
-            blocks = loadLevel(Number(k),game)
+            blocks = loadLevel(Number(k), game)
         }
     })
 
@@ -39,22 +39,24 @@ var EnableDebugMode = function (enable,game) {
 var __main = function () {
 
     var images = {
-        cloud:'img/cloud.png',
-        bullet:'img/bullet.png',
-        sky:'img/sky.png',
-        player:'img/player.png',
-        enemy1:'img/enemy1.png',
-        enemy2:'img/enemy2.png',
-        enemy3:'img/enemy3.png',
+        cloud: 'img/cloud.png',
+        bullet: 'img/bullet.png',
+        sky: 'img/sky.png',
+        player: 'img/player.png',
+        enemy1: 'img/enemy1.png',
+        enemy2: 'img/enemy2.png',
+        enemy3: 'img/enemy3.png',
+        fire: 'img/fire.png',
     }
 
     // 这里的function参数不是很理解
-    var game = Guagame.instance(30,images,function(g){
+    var game = Guagame.instance(30, images, function (g) {
         var s = new Scene(g)
+        // var s = new SceneTitle(g)
         g.runWithScene(s)
     })
 
-    EnableDebugMode(true,game)
+    EnableDebugMode(true, game)
 }
 
 __main()
